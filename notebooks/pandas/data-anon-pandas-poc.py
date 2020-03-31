@@ -1,10 +1,10 @@
 # Databricks notebook source
-# MAGIC %md
-# MAGIC # data-anon-pandas-poc
+# MAGIC %md # data-anon-pandas-poc
 
 # COMMAND ----------
 
 # MAGIC %python
+# MAGIC # Show csv files available
 # MAGIC display(dbutils.fs.ls("dbfs:/FileStore/tables/"))
 
 # COMMAND ----------
@@ -21,6 +21,8 @@ df2 = df[['first_name','last_name']].dropna()
 # output the data
 print(df2.head())
 
+# COMMAND ----------
+
 # hash first_name limit 15
 df2['first_name_hash'] = [hashlib.sha1(str.encode(str(i))).hexdigest()[:15] for i in df2['first_name']]
 # hash last_name limit 15
@@ -28,15 +30,14 @@ df2['last_name_hash'] = [hashlib.sha1(str.encode(str(i))).hexdigest()[:15] for i
 # output the data
 print(df2.head())
 
+# COMMAND ----------
+
+# New dataframe with only hashed values
 df3 = df2[['first_name_hash','last_name_hash']]
 print(df3.head())
 
+# COMMAND ----------
+
+# New dataframe with only hashed values and columns renamed
 df4 = df3[['first_name_hash','last_name_hash']].rename(columns={'first_name_hash':'first_name','last_name_hash':'last_name'})
 print(df4.head())
-
-
-# COMMAND ----------
-
-display(sql("select * from default.uk_500_626ee_csv order by first_name limit 5"))
-
-# COMMAND ----------
