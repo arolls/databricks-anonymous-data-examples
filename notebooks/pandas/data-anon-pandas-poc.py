@@ -9,14 +9,6 @@
 
 # COMMAND ----------
 
-a = hash("alex")
-b = hash("rolls")
-print(a)
-print(b)
-
-
-# COMMAND ----------
-
 import pandas as pd
 import hashlib
 
@@ -48,5 +40,3 @@ print(df4.head())
 display(sql("select * from default.uk_500_626ee_csv order by first_name limit 5"))
 
 # COMMAND ----------
-
-
