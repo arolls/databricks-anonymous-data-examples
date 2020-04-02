@@ -5,11 +5,11 @@
 
 import csv
 from faker import Faker
+from faker.providers import *
 import datetime
 
 def datagenerate(records, headers):
     fake = Faker('en_GB')
-    #fake1 = Faker('en_GB')   # To generate phone numbers
     with open("/dbfs/FileStore/tables/People_data.csv", 'wt') as csvFile:
         writer = csv.DictWriter(csvFile, fieldnames=headers)
         writer.writeheader()
@@ -37,20 +37,11 @@ def datagenerate(records, headers):
                     })
     
 if __name__ == '__main__':
-    records = 1000
+    records = 100000
     headers = ["email", "prefix", "name", "dob", "tele", "email",
                "address", "postcode", "city", "country", "year", "time"]
     datagenerate(records, headers)
-    dbutils.fs.put("/dbfs/FileStore/tables/People_data.csv")
     print("CSV generation complete!")
-
-# COMMAND ----------
-
-import pandas as pd
-
-pandas_df = pd.read_csv("/dbfs/FileStore/tables/People_data.csv");
-
-display(pandas_df)
 
 # COMMAND ----------
 
@@ -61,7 +52,7 @@ display(pandas_df)
 # MAGIC CREATE TABLE `synth_user_data` (`email` STRING, `prefix` STRING, `name` STRING, `dob` STRING, `tele` STRING, `email.1` STRING, `address` STRING, `postcode` STRING, `city` STRING, `county` STRING, `year` STRING, `time` STRING)
 # MAGIC USING com.databricks.spark.csv
 # MAGIC OPTIONS (
-# MAGIC   `multiLine` 'false',
+# MAGIC   `multiLine` 'true',
 # MAGIC   `escape` '"',
 # MAGIC   `header` 'true',
 # MAGIC   `delimiter` ',',
@@ -70,11 +61,7 @@ display(pandas_df)
 
 # COMMAND ----------
 
-# MAGIC %sql SELECT * from default.synth_user_data limit 10;
-
-# COMMAND ----------
-
-# MAGIC %sql SHOW CREATE TABLE synth_user_data;
+# MAGIC %sql SELECT * from default.synth_user_data order by name limit 10;
 
 # COMMAND ----------
 
@@ -83,4 +70,4 @@ datafile = open('/dbfs/FileStore/tables/People_data.csv', 'r')
 myreader = csv.reader(datafile)
 
 for row in myreader:
-    print(row[0], row[1], row[2])
+    print(row)
